@@ -1,0 +1,184 @@
+services:
+  kafka-1:
+    image: apache/kafka:latest
+
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+    volumes:
+      - kafka-data-1:/var/lib/kafka/data
+
+    networks:
+      - int-network
+
+
+  kafka-2:
+    image: apache/kafka:latest
+
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: broker,controller
+
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+    volumes:
+      - kafka-data-2:/var/lib/kafka/data
+
+    networks:
+      - int-network
+
+
+  kafka-3:
+    image: apache/kafka:latest
+
+    environment:
+      KAFKA_NODE_ID: 3
+      KAFKA_PROCESS_ROLES: broker,controller
+
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9092
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+    volumes:
+      - kafka-data-3:/var/lib/kafka/data
+
+    networks:
+      - int-network
+
+
+  producer-service:
+    build: ./producer-service
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+    networks:
+      - int-network
+      - ext-network
+
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+
+  consumer-temperatura:
+    build: ./consumer-service
+
+    ports:
+      - "8081:8080"
+
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+    networks:
+      - ext-network
+      - int-network
+
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      KAFKA_TOPIC: temperatura
+      KAFKA_GROUP_ID: temperatura-consumer
+      SENSOR_MIN: "10"
+      SENSOR_MAX: "35"
+
+  consumer-vibracao:
+    build: ./consumer-service
+
+    ports:
+      - "8084:8080"
+
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+    networks:
+      - ext-network
+      - int-network
+
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      KAFKA_TOPIC: vibracao
+      KAFKA_GROUP_ID: vibracao-consumer
+      SENSOR_MIN: "10"
+      SENSOR_MAX: "35"
+
+  consumer-energia:
+    build: ./consumer-service
+
+    ports:
+      - "8085:8080"
+
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+
+    networks:
+      - ext-network
+      - int-network
+
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      KAFKA_TOPIC: energia
+      KAFKA_GROUP_ID: energia-consumer
+      SENSOR_MIN: "10"
+      SENSOR_MAX: "35"
+
+volumes:
+  kafka-data-1:
+  kafka-data-2:
+  kafka-data-3:
+
+networks:
+  ext-network:
+    driver: bridge
+
+  int-network:
+    driver: bridge
+    internal: true
