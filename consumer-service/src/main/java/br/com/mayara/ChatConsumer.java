@@ -60,18 +60,17 @@ public class ChatConsumer {
                 for (ConsumerRecord<String, String> record : records) {
                     try {
                         JsonNode json = mapper.readTree(record.value());
-                        JsonNode valueNode = json.get(TOPIC);
+                        JsonNode valueNode = json.get("valor");
 
                         if (valueNode == null || !valueNode.isNumber()) {
                             logger.error(
-                                "Campo '{}' ausente ou inválido na mensagem: {}",
-                                TOPIC,
+                                "Campo 'valor' ausente ou inválido na mensagem: {}",
                                 record.value()
                             );
                             continue;
                         }
 
-                        int sensorId = json.get("sensorID").asInt();
+                        String sensorId = json.get("sensorId").asText();
                         String setor = json.get("setor").asText();
                         double sensorValue = valueNode.asDouble();
                         String timestamp = json.get("timestamp").asText();
