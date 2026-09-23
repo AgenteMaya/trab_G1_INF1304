@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: consumer-energia
-        image: mayainha/consumer-service:v2
+        image: mayainha/consumer-service:v3
 
         env:
         - name: KAFKA_BOOTSTRAP_SERVERS
