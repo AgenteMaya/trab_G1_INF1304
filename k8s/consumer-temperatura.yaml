@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: consumer-temperatura
-        image: mayainha/consumer-service:v1
+        image: mayainha/consumer-service:v2
 
         env:
         - name: KAFKA_BOOTSTRAP_SERVERS
