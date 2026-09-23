@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: consumer-vibracao
+  namespace: inf1304-g1
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: consumer-vibracao
+
+  template:
+    metadata:
+      labels:
+        app: consumer-vibracao
+
+    spec:
+      containers:
+      - name: consumer-vibracao
+        image: mayainha/consumer-service:v2
+
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-1-0.kafka-headless:9092,kafka-2-0.kafka-headless:9092,kafka-3-0.kafka-headless:9092"
+
+        - name: KAFKA_TOPIC
+          value: "vibracao"
+
+        - name: KAFKA_GROUP_ID
+          value: "vibracao-consumer"
+
+        - name: SENSOR_MIN
+          value: "1"
+
+        - name: SENSOR_MAX
+          value: "3"
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
