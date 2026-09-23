@@ -19,45 +19,45 @@ spec:
 
     spec:
       containers:
-        - name: producer-producao
-          image: mayainha/producer-service:v1
+      - name: producer-producao
+        image: mayainha/producer-service:v1
 
-          env:
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-1-0.kafka-headless:9092,kafka-2-0.kafka-headless:9092,kafka-3-0.kafka-headless:9092"
 
-            - name: TOPIC_TEMPERATURA
-              value: "temperatura"
+        - name: TOPIC_TEMPERATURA
+          value: "temperatura"
 
-            - name: TOPIC_VIBRACAO
-              value: "vibracao"
+        - name: TOPIC_VIBRACAO
+          value: "vibracao"
 
-            - name: TOPIC_ENERGIA
-              value: "energia"
+        - name: TOPIC_ENERGIA
+          value: "energia"
 
-            - name: SENSOR_INTERVAL_MS
-              value: "1000"
+        - name: SENSOR_INTERVAL_MS
+          value: "1000"
 
-            - name: ANOMALY_PROBABILITY
-              value: "0.05"
+        - name: ANOMALY_PROBABILITY
+          value: "0.05"
 
-            - name: SENSOR_SETOR
-              value: "producao"
+        - name: SENSOR_SETOR
+          value: "producao"
 
-            - name: TEMP_MIN
-              value: "20"
+        - name: TEMP_MIN
+          value: "20"
 
-            - name: TEMP_MAX
-              value: "70"
+        - name: TEMP_MAX
+          value: "70"
 
-            - name: VIB_MIN
-              value: "0"
+        - name: VIB_MIN
+          value: "0"
 
-            - name: VIB_MAX
-              value: "5"
+        - name: VIB_MAX
+          value: "5"
 
-            - name: ENERGIA_MIN
-              value: "5"
+        - name: ENERGIA_MIN
+          value: "5"
 
-            - name: ENERGIA_MAX
-              value: "50"
+        - name: ENERGIA_MAX
+          value: "50"

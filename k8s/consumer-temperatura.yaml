@@ -19,21 +19,21 @@ spec:
 
     spec:
       containers:
-        - name: consumer-temperatura
-          image: mayainha/consumer-service:v1
+      - name: consumer-temperatura
+        image: mayainha/consumer-service:v1
 
-          env:
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-1-0.kafka-headless:9092,kafka-2-0.kafka-headless:9092,kafka-3-0.kafka-headless:9092"
 
-            - name: KAFKA_TOPIC
-              value: "temperatura"
+        - name: KAFKA_TOPIC
+          value: "temperatura"
 
-            - name: KAFKA_GROUP_ID
-              value: "temperatura-consumer"
+        - name: KAFKA_GROUP_ID
+          value: "temperatura-consumer"
 
-            - name: SENSOR_MIN
-              value: "10"
+        - name: SENSOR_MIN
+          value: "10"
 
-            - name: SENSOR_MAX
-              value: "35"
+        - name: SENSOR_MAX
+          value: "35"
