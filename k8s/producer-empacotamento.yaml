@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: producer-empacotamento
+  namespace: inf1304-g1
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: producer-empacotamento
+
+  template:
+    metadata:
+      labels:
+        app: producer-empacotamento
+
+    spec:
+      containers:
+      - name: producer-empacotamento
+        image: mayainha/producer-service:v1
+
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-1-0.kafka-headless:9092,kafka-2-0.kafka-headless:9092,kafka-3-0.kafka-headless:9092"
+
+        - name: TOPIC_TEMPERATURA
+          value: "temperatura"
+
+        - name: TOPIC_VIBRACAO
+          value: "vibracao"
+
+        - name: TOPIC_ENERGIA
+          value: "energia"
+
+        - name: SENSOR_INTERVAL_MS
+          value: "100"
+
+        - name: ANOMALY_PROBABILITY
+          value: "0.05"
+
+        - name: SENSOR_SETOR
+          value: "empacotamento"
+
+        - name: TEMP_MIN
+          value: "20"
+
+        - name: TEMP_MAX
+          value: "30"
+
+        - name: VIB_MIN
+          value: "0"
+
+        - name: VIB_MAX
+          value: "5"
+
+        - name: ENERGIA_MIN
+          value: "5"
+
+        - name: ENERGIA_MAX
+          value: "10"
