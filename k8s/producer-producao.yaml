@@ -36,7 +36,7 @@ spec:
           value: "energia"
 
         - name: SENSOR_INTERVAL_MS
-          value: "100"
+          value: "10"
 
         - name: ANOMALY_PROBABILITY
           value: "0.05"
