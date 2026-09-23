@@ -43,7 +43,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>br.com.mayara.ChatConsumer</mainClass> <!-- Substitua com o nome da sua classe principal -->
+                            <mainClass>br.com.mayara.SensorConsumer</mainClass> <!-- Substitua com o nome da sua classe principal -->
                         </manifest>
                     </archive>
                     <descriptorRefs>
