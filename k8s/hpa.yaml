@@ -25,3 +25,59 @@ spec:
       target:
         type: Utilization
         averageUtilization: 60
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+
+metadata:
+  name: consumer-vibracao-hpa
+  namespace: inf1304-g1
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: consumer-vibracao
+
+  minReplicas: 1
+  maxReplicas: 6
+
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60
+
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+
+metadata:
+  name: consumer-energia-hpa
+  namespace: inf1304-g1
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: consumer-energia
+
+  minReplicas: 1
+  maxReplicas: 6
+
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60
+
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
