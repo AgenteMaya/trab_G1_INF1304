@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: consumer-energia
+  namespace: inf1304-g1
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: consumer-energia
+
+  template:
+    metadata:
+      labels:
+        app: consumer-energia
+
+    spec:
+      containers:
+      - name: consumer-energia
+        image: mayainha/consumer-service:v3
+
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-1-0.kafka-headless:9092,kafka-2-0.kafka-headless:9092,kafka-3-0.kafka-headless:9092"
+
+        - name: KAFKA_TOPIC
+          value: "energia"
+
+        - name: KAFKA_GROUP_ID
+          value: "energia-consumer"
+
+        - name: SENSOR_MIN
+          value: "10"
+
+        - name: SENSOR_MAX
+          value: "35"
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"

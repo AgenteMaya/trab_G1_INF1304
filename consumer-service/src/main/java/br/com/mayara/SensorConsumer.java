@@ -1,5 +1,5 @@
 /**
-* ChatConsumer.java
+* SensorConsumer.java
 * This class implements a Kafka consumer that listens for messages on the "chatmessages" topic.
 * It receives messages from Kafka and broadcasts them to all connected WebSocket
 clients.
@@ -24,14 +24,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ChatConsumer {
+public class SensorConsumer {
     private static final String TOPIC = System.getenv("KAFKA_TOPIC"); /// Nome do tópico Kafka do chat.
     private static final String GROUP_ID = System.getenv("KAFKA_GROUP_ID"); /// ID do grupo de consumidores Kafka.
-    private static final Logger logger = LoggerFactory.getLogger(ChatConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(SensorConsumer.class);
 
     /// Instância do logger para registrar informações e erros.
     /**
-     * Main method to start the ChatConsumer and WebSocket server.
+     * Main method to start the SensorConsumer and WebSocket server.
      * It initializes the Kafka consumer, subscribes to the "chat-messages" topic,
      * and continuously polls for new messages.
      * Received messages are broadcasted to all connected WebSocket clients.
@@ -39,7 +39,7 @@ public class ChatConsumer {
      * @param args Command line arguments (not used).
      */
     public static void main(String[] args) {
-        logger.info("Starting Chat Consumer.");
+        logger.info("Starting Sensor Consumer.");
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, System.getenv("KAFKA_BOOTSTRAP_SERVERS"));
         props.put("group.id", GROUP_ID);
@@ -60,18 +60,17 @@ public class ChatConsumer {
                 for (ConsumerRecord<String, String> record : records) {
                     try {
                         JsonNode json = mapper.readTree(record.value());
-                        JsonNode valueNode = json.get(TOPIC);
+                        JsonNode valueNode = json.get("valor");
 
                         if (valueNode == null || !valueNode.isNumber()) {
                             logger.error(
-                                "Campo '{}' ausente ou inválido na mensagem: {}",
-                                TOPIC,
+                                "Campo 'valor' ausente ou inválido na mensagem: {}",
                                 record.value()
                             );
                             continue;
                         }
 
-                        int sensorId = json.get("sensorID").asInt();
+                        String sensorId = json.get("sensorId").asText();
                         String setor = json.get("setor").asText();
                         double sensorValue = valueNode.asDouble();
                         String timestamp = json.get("timestamp").asText();
